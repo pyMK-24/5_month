@@ -16,13 +16,13 @@ def director_detail_api_view(request,id):
     except models.Director.DoesNotExist:
         return Response(data={'Error': 'Director not found'},
                         status=status.HTTP_404_NOT_FOUND)
-    data = serializers.DirectorDetailSerializer(director).data
+    data = serializers.DirectorSerializer(director).data
     return Response(data=data)
     
 @api_view(http_method_names=['GET'])
 def movie_list_api_view(request):
     movies = models.Movie.objects.all()
-    serializer = serializers.MovieDetailSerializer(instance=movies, many=True)
+    serializer = serializers.MovieSerializer(instance=movies, many=True)
     return Response(data=serializer.data)
     
 @api_view(['GET'])
@@ -32,7 +32,7 @@ def movie_detail_api_view(request,id):
     except models.Movie.DoesNotExist:
         return Response(data={'Error':'Movie not found'},
                         status=status.HTTP_404_NOT_FOUND)
-    data = serializers.MovieDetailSerializer(movie).data
+    data = serializers.MovieSerializer(movie).data
     return Response(data=data)
 
 @api_view(http_method_names=['GET'])
@@ -48,5 +48,5 @@ def review_detail_api_view(request,id):
     except models.Review.DoesNotExist:
         return Response(data={'Error':'Review not found'},
                         status=status.HTTP_404_NOT_FOUND)
-    data = serializers.ReviewDetailSerializer(review).data
+    data = serializers.ReviewSerializer(review).data
     return Response(data=data)
