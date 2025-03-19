@@ -11,8 +11,10 @@ def director_list_api_view(request):
         serializer = serializers.DirectorSerializer(instance=directors, many=True)
         return Response(data=serializer.data)
     elif request.method == 'POST':
-        name = request.data.get('name')
-        print(name)
+        serializer= serializers.DirectorValidateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST,data=serializer.errors)
+        name = serializer.validated_data.get('name')
         
         with transaction.atomic():
             director = models.Director.objects.create(name=name)
@@ -46,10 +48,13 @@ def movie_list_api_view(request):
         serializer = serializers.MovieSerializer(instance=movies, many=True)
         return Response(data=serializer.data)
     elif request.method == 'POST':
-        title = request.data.get('title')
-        description = request.data.get('description')
-        duration = request.data.get('duration')
-        director_id = request.data.get('director_id')
+        serializer = serializers.MovieValidateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST,data=serializer.errors)
+        title = serializer.validated_data.get('title')
+        description = serializer.validated_data.get('description')
+        duration = serializer.validated_data.get('duration')
+        director_id = serializer.validated_data.get('director_id')
         
         
         with transaction.atomic():
@@ -92,9 +97,12 @@ def review_list_api_view(request):
         serializer = serializers.ReviewSerializer(instance=reviews, many=True)
         return Response(data=serializer.data)
     elif request.method == 'POST':
-        text = request.data.get('text')
-        movie_id = request.data.get('movie_id')
-        stars = request.data.get('stars')
+        serializer = serializers.ReviewValidateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST,data=serializer.errors)
+        text = serializer.validated_data.get('text')
+        movie_id = serializer.validated_data.get('movie_id')
+        stars = serializer.validated_data.get('stars')
         
         with transaction.atomic():
             review = models.Review.objects.create(text=text,
