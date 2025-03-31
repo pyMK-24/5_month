@@ -20,4 +20,4 @@ class UserRegisterSerializer(serializers.Serializer):
     
     
 class SMSCodeSerializer(serializers.Serializer):
-    sms_code = serializers.CharField(max_length=6)
+    sms_code = serializers.CharField(max_length=10)
